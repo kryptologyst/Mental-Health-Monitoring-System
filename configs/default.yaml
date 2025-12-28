@@ -1,0 +1,60 @@
+# Mental Health Monitoring Configuration
+
+# Model Configuration
+model:
+  name: "mental_health_classifier"
+  base_model: "microsoft/DialoGPT-medium"  # Can be switched to ClinicalBERT, BioBERT, etc.
+  num_labels: 6  # neutral, happy, sad, anxious, angry, fearful
+  max_length: 512
+  dropout: 0.1
+
+# Training Configuration
+training:
+  batch_size: 16
+  learning_rate: 2e-5
+  num_epochs: 10
+  warmup_steps: 100
+  weight_decay: 0.01
+  gradient_accumulation_steps: 1
+  max_grad_norm: 1.0
+
+# Data Configuration
+data:
+  train_split: 0.7
+  val_split: 0.15
+  test_split: 0.15
+  min_text_length: 10
+  max_text_length: 512
+  synthetic_data_size: 1000
+
+# Evaluation Configuration
+evaluation:
+  metrics: ["accuracy", "f1_macro", "f1_weighted", "precision", "recall", "auc"]
+  calibration_bins: 10
+  confidence_threshold: 0.8
+
+# Privacy and De-identification
+privacy:
+  enable_deid: true
+  deid_entities: ["PERSON", "PHONE_NUMBER", "EMAIL_ADDRESS", "LOCATION", "DATE_TIME"]
+  redaction_char: "*"
+
+# Device Configuration
+device:
+  auto_detect: true
+  fallback_order: ["cuda", "mps", "cpu"]
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  log_dir: "logs"
+  use_wandb: false
+  wandb_project: "mental-health-monitoring"
+
+# Demo Configuration
+demo:
+  interface: "streamlit"  # or "gradio"
+  port: 8501
+  max_text_length: 1000
+  show_confidence: true
+  show_explanations: true
